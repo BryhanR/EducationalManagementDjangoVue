@@ -1,13 +1,15 @@
-from django.conf.urls import url 
-from django.contrib import admin 
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns 
-from django.views.generic import TemplateView 
+from django.conf.urls import url
+from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+
+from django.urls import include
+
 
 urlpatterns = [
-    url(r'^$',
-        TemplateView.as_view(template_name='index.html'), name='uHome'
-    ), 
-    url(r'^admin/', admin.site.urls),
-] 
+    url(r'^$', include('authentication.urls'), name='vIndex'),
+    url(r'^auth/', include('authentication.urls')),
+    url(r'^P<path>/$', include('authentication.urls'), name='vIndex'),
+]
 
 urlpatterns += staticfiles_urlpatterns()
