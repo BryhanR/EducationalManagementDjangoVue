@@ -2,3 +2,5 @@
 educ_backend/db.sqlite3
 educ_backend/public
 *.pyc
+educ_frontend/webpack-stats.json
+educ_frontend/package-lock.json
