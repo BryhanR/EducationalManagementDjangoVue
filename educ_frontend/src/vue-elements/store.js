@@ -35,9 +35,11 @@ export default new Vuex.Store({
     login({commit}, user){
         return new Promise((resolve, reject) => {
           commit('auth_request')
-          //let csrftoken = Cookies.get('csrftoken'); // Using JS Cookies library
-          //let headers = {X_CSRFTOKEN: csrftoken};
-          axios({url: 'http://localhost:8000/auth/logIn', data: user, method: 'POST' })
+          var data = new FormData();
+          data.append('username', user.username);
+          data.append('password', user.password);
+
+          axios.post('http://localhost:8000/auth/logIn', data)
           .then(resp => {
             const token = resp.data.token
             const user = resp.data.user

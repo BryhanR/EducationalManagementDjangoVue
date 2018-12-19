@@ -5,8 +5,10 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 
+import json
 
 # should verify the user is logged in.
+
 def index(request):
     template = loader.get_template('index.html')
     context = {
@@ -14,9 +16,12 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 # function to be called when the user want's to log in.
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 def logIn(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    username = request.POST.get('username')
+    password = request.POST.get('password')
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
