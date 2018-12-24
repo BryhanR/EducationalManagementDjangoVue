@@ -5,9 +5,20 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+
 import json
 
 # should verify the user is logged in.
+
+def getUsers(request):
+    users = User.objects.all()
+    userList = User.objects.values()
+    user = get_user_model()
+    user.objects.all()
+    return HttpResponse(user)
 
 def index(request):
     template = loader.get_template('index.html')
@@ -23,9 +34,12 @@ def logIn(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = authenticate(request, username=username, password=password)
+    print(user)
     if user is not None:
         login(request, user)
-        return HttpResponse("You've been logged in successfully.")
+        return HttpResponse({'data':{
+            'token': 'abcderf'
+        }})
     else:
         return HttpResponse("You haven't been logged in sucessfully.")
 

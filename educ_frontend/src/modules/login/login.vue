@@ -24,8 +24,13 @@
             login: function () {
                 let username = this.email
                 let password = this.password
+                let self = this;
                 this.$store.dispatch('login', { username, password })
-            .then(() => this.$router.push('/'))
+            .then(() =>
+            {
+                console.log('logged in successfully');
+                 this.$router.push({ path: '/' })
+             })
             .catch(err => console.log(err))
             }
         }

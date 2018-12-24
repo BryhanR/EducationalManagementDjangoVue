@@ -4,9 +4,6 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
-
 
 export default new Vuex.Store({
   state: {
