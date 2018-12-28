@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Axios from 'axios'
 
-import store from './vue-elements/store'
+import store from './vue-elements/store/store'
 import router from './vue-elements/router'
 
 Vue.prototype.$http = Axios;
@@ -14,6 +14,7 @@ if (token) {
 
 new Vue({
     el: '#app',
+    delimiters: ['[%', '%]'],
     router,
     store,
     render: h => h(App)

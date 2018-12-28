@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'webpack_loader',
+    'authentication',
     'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -51,22 +53,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-AUTHENTICATION_BACKENDS = ('authentication.backend.DefaultAuthenticationBackEnd',)
+#AUTHENTICATION_BACKENDS = ('authentication.backend.DefaultAuthenticationBackEnd',)
+
+
+#SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
 
 LOGIN_REDIRECT_URL = '/'
 
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8000',
-    '127.0.0.1:8000',
-)
-CORS_ORIGIN_REGEX_WHITELIST = (
-    'localhost:8000',
-    '127.0.0.1:8000',
-)
 
-CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_NAME = "XCSRF-TOKEN"
+
 
 ROOT_URLCONF = 'educ_backend.urls'
 
