@@ -1,63 +1,73 @@
-from rest_framework import status, exceptions
-from django.http import HttpResponse
-from rest_framework.authentication import get_authorization_header, BaseAuthentication
-from users.models import User
-import jwt
-import json
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import User
+
+from rest_framework.authentication import get_authorization_header
+from django.core import exceptions
 
 
-class TokenAuthentication(BaseAuthentication):
-    model = None
+class DefaultAuthenticationBackEnd:
 
-    def get_model(self):
-        return User
+    def authenticate(self, request, username=None, password=None):
+        if username and password:
+            try:
+                user = User.objects.get(email=username)
+                usr_valid = (user.email == username)
+                pwd_valid = check_password(password, user.password)
+                if usr_valid and pwd_valid:
+                    return user
+            except User.DoesNotExist:
+                return None
+        return None
+
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+
+
+class JWTAuthentication(object):
+
+    """
+    Simple token based authentication.
+    Clients should authenticate by passing the token key in the "Authorization"
+    HTTP header, prepended with the string "Token ".  For example:
+    Authorization: Token 401f7ac837da42b97f613d789819ff93537bee6a
+    """
 
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
+
         if not auth or auth[0].lower() != b'token':
             return None
 
-        if len(auth) == 1:
-            msg = 'Invalid token header. No credentials provided.'
-            raise exceptions.AuthenticationFailed(msg)
-        elif len(auth) > 2:
-            msg = 'Invalid token header'
-            raise exceptions.AuthenticationFailed(msg)
-
         try:
-            token = auth[1]
-            if token == "null":
-                msg = 'Null token not allowed'
-                raise exceptions.AuthenticationFailed(msg)
+            token = auth[1].decode()
         except UnicodeError:
-            msg = 'Invalid token header. Token string should not contain invalid characters.'
+            msg = _('Invalid token header. Token string should not contain invalid characters.')
             raise exceptions.AuthenticationFailed(msg)
 
         return self.authenticate_credentials(token)
 
-    def authenticate_credentials(self, token):
-        model = self.get_model()
-        payload = jwt.decode(token, "SECRET_KEY")
-        email = payload['email']
-        userid = payload['id']
-        msg = {'Error': "Token mismatch", 'status': "401"}
-        try:
+        def authenticate_credentials(self, payload):
 
-            user = User.objects.get(
-                email=email,
-                id=userid,
-                is_active=True
-            )
+            decoded_dict = jws.verify(payload, 'seKre8', algorithms=['HS256'])
 
-            if not user.token['token'] == token:
-                raise exceptions.AuthenticationFailed(msg)
+            username = decoded_dict.get('username', None)
+            expiry = decoded_dict.get('expiry', None)
 
-        except jwt.ExpiredSignature or jwt.DecodeError or jwt.InvalidTokenError:
-            return HttpResponse({'Error': "Token is invalid"}, status="403")
-        except User.DoesNotExist:
-            return HttpResponse({'Error': "Internal server error"}, status="500")
+            try:
+                usr = User.objects.get(username=username)
+            except model.DoesNotExist:
+                raise exceptions.AuthenticationFailed(_('Invalid token.'))
 
-        return (user, token)
+            if not usr.is_active:
+                raise exceptions.AuthenticationFailed(_('User inactive or deleted.'))
 
-    def authenticate_header(self, request):
-        return 'Token'
+            if expiry < datetime.date.today():
+                raise exceptions.AuthenticationFailed(_('Token Expired.'))
+
+            return (usr, payload)
+
+        def authenticate_header(self, request):
+            return 'Token'

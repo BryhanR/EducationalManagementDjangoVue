@@ -15,21 +15,29 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework_jwt.settings import api_settings
 
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+from rest_framework.authentication import get_authorization_header
+
 # should verify the user is logged in.
 #@login_required
+@api_view(['GET'])
+#@permission_classes((AllowAny,))
 def getUsers(request):
     users = User.objects.all()
     userList = User.objects.values()
     user = get_user_model()
     user.objects.all()
-    print(str(user))
     return JsonResponse({
         'user': str(request.user),
         'user_Authenticated': request.user.is_authenticated,
-        #'session_user_Authenticated': request.session.user.is_authenticated,
-        'session': str(request.session)
+        'user_id': request.user.id
     })
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+@ensure_csrf_cookie
 def index(request):
     template = loader.get_template('index.html')
     context = {
@@ -37,7 +45,10 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 # function to be called when the user want's to log in.
+
+
 from django.views.decorators.clickjacking import xframe_options_exempt
+
 
 @xframe_options_exempt
 @csrf_exempt

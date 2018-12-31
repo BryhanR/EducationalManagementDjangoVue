@@ -9,7 +9,7 @@
                                 <fieldset class="clearfix">
                                     <p>
                                         <span class="fa fa-user"></span>
-                                        <input v-model="email" type="text" placeholder="Username" required>
+                                        <input v-model="email" type="email" placeholder="Username" required>
                                     </p>
                                     <p>
                                         <span class="fa fa-lock"></span>
