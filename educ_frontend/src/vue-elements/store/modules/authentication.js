@@ -2,10 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
+import router from '../../router'
+
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
 
 Vue.use(Vuex)
+
+
 
 let authentication = {
   namespaced: true,
@@ -15,27 +19,34 @@ let authentication = {
     user : {}
   },
   mutations: {
-    auth_request(state){
+    auth_request(state) {
       state.status = 'loading'
     },
-    auth_success(state, token, user){
+    auth_success(state, token, user) {
       state.status = 'success'
       state.token = token
       state.user = user
 
-      axios.defaults.headers.common['Authorization'] = token
-      localStorage.setItem('token', token)
+      //axios.defaults.headers.common['Authorization'] = 'Token' + token
+      //localStorage.setItem('token', token)
     },
-    auth_error(state){
+    auth_error(state) {
       state.status = 'error'
     },
-    logout(state){
+    logout(state) {
       state.status = ''
       state.token = ''
-
       axios.defaults.headers.common['Authorization'] = null
       localStorage.removeItem('token')
     },
+    updateToken(state, newToken) {
+        if(newToken && state.token !== newToken) {
+            state.token = newToken;
+            localStorage.setItem('token', newToken);
+        } else if(!newToken) {
+            //this.logout(state);
+        }
+    }
   },
   actions: {
     login({commit}, user){
@@ -65,6 +76,20 @@ let authentication = {
           })
         })
     },
+    logout({commit}, user){
+        return new Promise((resolve, reject) => {
+          axios.post('http://localhost:8000/auth/logOut')
+          .then(resp => {
+                commit('logout');
+                router.go();
+          })
+          .catch(err => {
+            commit('auth_error')
+            localStorage.removeItem('token')
+            reject(err)
+          })
+        })
+    },
     getUsers({commit}, user){
         return new Promise((resolve, reject) => {
 
@@ -74,20 +99,28 @@ let authentication = {
             const user = resp.data.user
             if (token) {
                 resolve(resp)
-            } else {
-                resolve(resp)
             }
-
+            reject(resp)
           })
           .catch(err => {
             reject(err)
           })
         })
     },
+    updateToken({commit}, newToken) {
+        console.log('Updating token')
+        if (newToken) {
+            commit('updateToken', newToken.token);
+        } else {
+            commit('logout')
+        }
+
+    },
   },
   getters : {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
+    getToken: state => state.token
   }
 };
 

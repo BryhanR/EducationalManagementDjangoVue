@@ -18,7 +18,9 @@ urlpatterns = [
     url(r'^auth-jwt/', obtain_jwt_token),
     url(r'^auth-jwt-refresh/', refresh_jwt_token),
     url(r'^auth-jwt-verify/', verify_jwt_token),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    url(r'^.*', views.index, name='login'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

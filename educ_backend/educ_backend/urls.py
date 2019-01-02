@@ -9,7 +9,6 @@ from django.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include('authentication.urls'), name='vIndex'),
-    url(r'^auth/', include('authentication.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

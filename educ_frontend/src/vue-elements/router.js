@@ -1,6 +1,8 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 import store from '../vue-elements/store/store'
+
+
 Vue.use(VueRouter)
 
 import login from '../modules/login/components/login.vue'
@@ -13,7 +15,8 @@ let router = new VueRouter({
         {
             path: '/',
             name: 'root',
-            redirect: 'dashboard'
+            redirect: 'dashboard',
+            meta: { requiresAuth: true }
         },
         { path: '/login', name: 'login', component: login },
         { path: '/dashboard', name: 'dashboard', component: dashboard, meta: { requiresAuth: true } },

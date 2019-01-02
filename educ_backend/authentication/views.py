@@ -72,5 +72,8 @@ def logIn(request):
 
 
 # function to be called when the user want's to log out.
+@csrf_exempt
 def logOut(request):
-    return HttpResponse("You're being logged out.")
+    return JsonResponse({
+        'status': 'Logged out'
+    })

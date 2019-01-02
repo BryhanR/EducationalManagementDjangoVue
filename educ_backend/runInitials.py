@@ -11,7 +11,7 @@ def createBaseUsers():
     users = [
         {
             'username': 'brhn21',
-            'email': 'brarodriguezm@hotmail.com',
+            'email': 'test@mail.com',
             'password': 'admin123'
         }
     ]

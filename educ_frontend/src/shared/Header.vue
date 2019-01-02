@@ -17,7 +17,7 @@
         <a class="nav-link" href="#">Pricing</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" @click.prevent="logOut" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Dropdown link
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -41,11 +41,20 @@
                 let password = this.password
                 let self = this;
                 this.$store.dispatch('authentication/getUsers', { })
-            .then((resp) =>
-            {
-                console.log('Users Received successfully', resp);
-             })
-            .catch(err => console.log(err))
+                .then((resp) =>
+                {
+                    console.log('Users Received successfully', resp);
+                 })
+                .catch(err => console.log(err))
+            },
+            logOut: function () {
+                let self = this;
+                this.$store.dispatch('authentication/logout', { })
+                .then((resp) =>
+                {
+                    console.log('Users Received successfully', resp);
+                 })
+                .catch(err => console.log(err))
         }
         }
     }
