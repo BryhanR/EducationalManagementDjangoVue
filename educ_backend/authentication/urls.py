@@ -11,7 +11,7 @@ from django.urls import include
 
 urlpatterns = [
     url(r'^users$', views.getUsers, name='getUsers'),
-    url(r'^$', views.index, name='login'),
+    #url(r'^$', views.index, name='login'),
     url(r'^logIn$', views.logIn, name='login'),
     url(r'^logOut$', views.logOut, name='logout'),
 
@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^auth-jwt-verify/', verify_jwt_token),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    url(r'^.*', views.index, name='login'),
+    #url(r'^.*', views.index, name='login'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

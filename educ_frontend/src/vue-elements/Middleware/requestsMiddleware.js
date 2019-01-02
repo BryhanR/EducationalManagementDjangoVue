@@ -18,13 +18,16 @@ export default function initRequestMiddleware() {
             console.log('onSync');
             return promise;
         },
-        onRequestError(error) {
-            console.log('Ha ocurrido un error ', error);
-        },
-        onResponse(response) { // will verify if there's an error with the request, and log the user out
+        onResponse(response) {
             console.log('onResponse');
             store.dispatch('authentication/updateToken', { token: JSON.parse(response.data).token });
             return response;
-        }
+        },
+        onResponseError(error) {
+            console.log('Ha ocurrido un error ', error);
+            if (error.response.status === 401) {
+                store.dispatch('authentication/logout', { });
+            }
+        },
     });
 }

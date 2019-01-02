@@ -81,7 +81,7 @@ let authentication = {
           axios.post('http://localhost:8000/auth/logOut')
           .then(resp => {
                 commit('logout');
-                router.go();
+                router.go('/');
           })
           .catch(err => {
             commit('auth_error')

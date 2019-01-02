@@ -14,6 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework_jwt.settings import api_settings
 
+from django.shortcuts import redirect
+
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -43,6 +45,10 @@ def index(request):
     context = {
     }
     return HttpResponse(template.render(context, request))
+
+@ensure_csrf_cookie
+def defaultRoute(request): # will always redirect to homepage
+    return redirect('index')
 
 # function to be called when the user want's to log in.
 
