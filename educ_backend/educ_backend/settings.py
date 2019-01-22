@@ -25,7 +25,7 @@ SECRET_KEY = '7825@bje7edp&8a&gj!(1uzsd4a9#mj@x4+hb^w=n(c*s)%9zn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://localhost:8000', '127.0.0.1']
 
 
 # Application definition
@@ -39,31 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'webpack_loader',
     'authentication',
-    'corsheaders',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 AUTHENTICATION_BACKENDS = ('authentication.backend.DefaultAuthenticationBackEnd',)
-
-
-#SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
-
-
-LOGIN_REDIRECT_URL = '/'
-
-CORS_ORIGIN_ALLOW_ALL = True
-
-CSRF_COOKIE_NAME = "XCSRF-TOKEN"
 
 
 ROOT_URLCONF = 'educ_backend.urls'

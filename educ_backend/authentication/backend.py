@@ -25,15 +25,15 @@ class DefaultAuthenticationBackEnd:
         except User.DoesNotExist:
             return None
 
-
+"""
 class JWTAuthentication(object):
 
-    """
+    ""
     Simple token based authentication.
     Clients should authenticate by passing the token key in the "Authorization"
     HTTP header, prepended with the string "Token ".  For example:
     Authorization: Token 401f7ac837da42b97f613d789819ff93537bee6a
-    """
+    ""
 
     def authenticate(self, request):
         auth = get_authorization_header(request).split()
@@ -71,3 +71,5 @@ class JWTAuthentication(object):
 
         def authenticate_header(self, request):
             return 'Token'
+
+"""

@@ -4,8 +4,9 @@ import axios from 'axios'
 
 import router from '../../router'
 
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+//axios.defaults.xsrfCookieName = "XCSRF-TOKEN";
+
 
 Vue.use(Vuex)
 
@@ -56,7 +57,7 @@ let authentication = {
           data.append('username', user.username);
           data.append('password', user.password);
 
-          axios.post('http://localhost:8000/auth/logIn', data)
+          axios.post('/auth/logIn', data)
           .then(resp => {
             const token = resp.data.token
             const user = resp.data.user
@@ -78,7 +79,7 @@ let authentication = {
     },
     logout({commit}, user){
         return new Promise((resolve, reject) => {
-          axios.post('http://localhost:8000/auth/logOut')
+          axios.post('/auth/logOut')
           .then(resp => {
                 commit('logout');
                 router.go('/');
@@ -93,7 +94,7 @@ let authentication = {
     getUsers({commit}, user){
         return new Promise((resolve, reject) => {
 
-          axios.get('http://localhost:8000/auth/users')
+          axios.get('/auth/users')
           .then(resp => {
             const token = resp.data.token
             const user = resp.data.user

@@ -20,6 +20,7 @@ let router = new VueRouter({
         },
         { path: '/login', name: 'login', component: login },
         { path: '/dashboard', name: 'dashboard', component: dashboard, meta: { requiresAuth: true } },
+        //{ path: '*', redirect: '/'}
     ]
 });
 

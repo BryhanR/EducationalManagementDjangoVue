@@ -10,17 +10,14 @@ from django.contrib.auth import get_user_model
 
 from django.http import JsonResponse
 
-from django.views.decorators.csrf import csrf_exempt
-
 from rest_framework_jwt.settings import api_settings
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response
+from django.template import RequestContext
 
 
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view
 
-from rest_framework.authentication import get_authorization_header
 
 # should verify the user is logged in.
 #@login_required
@@ -39,26 +36,21 @@ def getUsers(request):
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-@ensure_csrf_cookie
 def index(request):
     template = loader.get_template('index.html')
     context = {
     }
-    return HttpResponse(template.render(context, request))
+    #return HttpResponse(template.render(context, request))
+    return render_to_response('index.html', context, RequestContext(request))
 
-@ensure_csrf_cookie
 def defaultRoute(request): # will always redirect to homepage
     return redirect('index')
 
 # function to be called when the user want's to log in.
 
-
-from django.views.decorators.clickjacking import xframe_options_exempt
-
-
-@xframe_options_exempt
-@csrf_exempt
 def logIn(request):
+
+    print(request.META)
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = authenticate(request, username=username, password=password)
@@ -78,7 +70,6 @@ def logIn(request):
 
 
 # function to be called when the user want's to log out.
-@csrf_exempt
 def logOut(request):
     return JsonResponse({
         'status': 'Logged out'

@@ -1,19 +1,23 @@
 var path = require('path')
 var webpack = require('webpack')
 
-var BundleTracker = require('webpack-bundle-tracker') 
+var BundleTracker = require('webpack-bundle-tracker')
 var WriteFilePlugin = require('write-file-webpack-plugin')
+
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: 'dist/',
+    publicPath: 'http://127.0.0.1:8000/dist/',
     filename: 'bundle.js'
   },
   plugins: [
-    new BundleTracker({filename: '/webpack-stats.json', indent: ' '}), 
-    new WriteFilePlugin()
+    new BundleTracker({filename: '/webpack-stats.json', indent: ' '}),
+    new WriteFilePlugin(),
+    new VueLoaderPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ],
   module: {
     rules: [
@@ -57,7 +61,7 @@ module.exports = {
               'vue-style-loader',
               'css-loader',
               'sass-loader?indentedSyntax'
-            ]
+            ],
           }
           // other vue-loader options go here
         }
@@ -84,15 +88,20 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true,
-    overlay: true
+    noInfo: false,
+    overlay: true,
+    hot: true,
+    stats: 'verbose',
+    headers: {
+        'Access-Control-Allow-Origin': '*'
+    }
   },
   performance: {
     hints: false
-  },
-  devtool: '#eval-source-map'
+  }
 }
 
+/*
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
@@ -100,16 +109,16 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-      compress: {
-        warnings: false
-      }
+      },
+      devServer: {
+    hot: true,
+    quiet: false,
+    headers: { 'Access-Control-Allow-Origin': '*' }
+  },
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: true
+      minimize: false
     })
   ])
 }
+*/
